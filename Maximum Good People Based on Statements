@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int max(int x, int y)
+    {
+        return x>y?x:y;
+    }
+    int maximumGood(vector<vector<int>>& statements) {
+        int n = (statements[0].size());
+        int ans = 0;
+        bool flags[n];
+        for(int i=0;i<(1<<n);i++)
+        {
+            memset(flags, false, sizeof(flags));
+            for(int j=0;j<n;j++)
+            {
+                if((i & (1<<j)))
+                {
+                   flags[j] = true; 
+                }
+            }
+            bool corr = true;
+            for(int j=0;j<n;j++)
+            {
+                if(flags[j])
+                {
+                    for(int k=0;k<n;k++)
+                    {
+                        if(statements[j][k]==0 && flags[k] && j!=k)
+                        {
+                            corr = false;
+                            break;
+                        }
+                        else if(statements[j][k]==1 && !flags[k] && j!=k)
+                        {
+                            corr = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(corr)
+            {
+                ans = max(ans,__builtin_popcount(i));
+                cout<<i<<" "<<__builtin_popcount(i)<<"\n";
+            }
+        }
+        return ans;
+    }
+};
+
+// Solution //
+
+Using brute force with bit manipulation, try with each possible permutation - Run time O(n^2 * 2^n)
